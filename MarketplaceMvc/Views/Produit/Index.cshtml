@@ -1,0 +1,30 @@
+@model IEnumerable<MarketplaceMvc.Models.Product>
+
+<h1>Liste des Produits</h1>
+
+<a asp-action="Creer" class="btn btn-primary">Ajouter un Produit</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Catégorie</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.CategoryId</td> <!-- Affiche l'ID, à remplacer par le nom si l'entité Category existe -->
+                <td>
+                    <a asp-action="Modifier" asp-route-id="@product.Id" class="btn btn-warning btn-sm">Modifier</a>
+                    <a asp-action="Supprimer" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

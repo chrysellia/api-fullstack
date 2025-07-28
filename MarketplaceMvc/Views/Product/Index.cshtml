@@ -1,0 +1,102 @@
+@model IEnumerable<MarketplaceMvc.Models.Product>
+
+@{
+    ViewData["Title"] = "Liste des Produits";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>@ViewData["Title"]</h2>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Ajouter un Produit
+                </a>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="alert alert-info text-center">
+                    <h4>Aucun produit trouvé</h4>
+                    <p>Commencez par ajouter votre premier produit.</p>
+                    <a asp-action="Create" class="btn btn-primary">Créer un produit</a>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                @* @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                } *@
+                                
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">@product.Name</h5>
+                                    <p class="card-text flex-grow-1">@product.Description</p>
+                                    <div class="mt-auto">
+                                        <p class="card-text">
+                                            <strong class="text-success">@product.Price.ToString("C")</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer">
+                                    <div class="btn-group w-100" role="group">
+                                        <a href="#" class="btn btn-outline-primary btn-sm">Voir</a>
+                                        <a href="#" class="btn btn-outline-secondary btn-sm">Modifier</a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Optionnel : Actualiser automatiquement la liste
+        function refreshProducts() {
+            window.location.reload();
+        }
+        
+        // Confirmation avant suppression (à implémenter plus tard)
+        function confirmDelete(productId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+                // Logique de suppression
+                console.log('Suppression du produit:', productId);
+            }
+        }
+    </script>
+}
