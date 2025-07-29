@@ -9,13 +9,6 @@ namespace MarketplaceMvc.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }
-        // public Category Category { get; set; } // décommente si tu as un modèle Category
-    }
-
-    public class AppDbContext : DbContext
-    {
-        public DbSet<Product> Products { get; set; }
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }
+

@@ -15,6 +15,7 @@ namespace MarketplaceMvc.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+        // GET: /Product/
         public async Task<IActionResult> Index()
         {
             var products = new List<Product>();
@@ -23,7 +24,7 @@ namespace MarketplaceMvc.Controllers
             {
                 using var httpClient = _httpClientFactory.CreateClient();
                 var response = await httpClient.GetAsync(ApiBaseUrl);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -31,7 +32,7 @@ namespace MarketplaceMvc.Controllers
                     {
                         PropertyNameCaseInsensitive = true
                     };
-                    
+
                     products = JsonSerializer.Deserialize<List<Product>>(json, options) ?? new List<Product>();
                 }
                 else
@@ -47,12 +48,15 @@ namespace MarketplaceMvc.Controllers
             return View(products);
         }
 
+        // GET: /Product/Create
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Product());
+            var produit = new Product(); // ← vient bien de MarketplaceMvc.Models
+            return View(produit);
         }
 
+        // POST: /Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
@@ -65,23 +69,23 @@ namespace MarketplaceMvc.Controllers
             try
             {
                 using var httpClient = _httpClientFactory.CreateClient();
-                
+
                 var options = new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
-                
+
                 var json = JsonSerializer.Serialize(product, options);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                
+
                 var response = await httpClient.PostAsync(ApiBaseUrl, content);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Success"] = "Produit créé avec succès!";
                     return RedirectToAction(nameof(Index));
                 }
-                
+
                 ModelState.AddModelError("", $"Erreur lors de la création: {response.StatusCode}");
             }
             catch (Exception ex)
