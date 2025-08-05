@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using MarketplaceMvc.Models; // Même namespace que votre modèle MVC
+using Microsoft.EntityFrameworkCore;
+using MarketplaceApi.Models; // Assurez-vous que c'est le bon namespace pour votre classe Product
 
 namespace MarketplaceApi.Controllers
 {
@@ -7,75 +8,107 @@ namespace MarketplaceApi.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        // Liste en mémoire pour stocker les produits (remplacez par votre base de données)
-        private static List<Product> _products = new List<Product>();
-        private static int _nextId = 1;
+        private readonly AppDbContext _context;
+
+        public ProductsController(AppDbContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/products
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return Ok(_products);
+            return await _context.Products.ToListAsync();
         }
 
         // GET: api/products/5
         [HttpGet("{id}")]
-        public ActionResult<Product> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
+            var product = await _context.Products.FindAsync(id);
+
             if (product == null)
             {
                 return NotFound();
             }
-            return Ok(product);
+
+            return product;
         }
 
         // POST: api/products
         [HttpPost]
-        public ActionResult<Product> CreateProduct(Product product)
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product) // <-- Add [FromBody] here
         {
             if (!ModelState.IsValid)
             {
+                // You might want to log ModelState errors here for debugging
+                // For example:
+                // foreach (var entry in ModelState.Values)
+                // {
+                //     foreach (var error in entry.Errors)
+                //     {
+                //         Console.WriteLine(error.ErrorMessage);
+                //     }
+                // }
                 return BadRequest(ModelState);
             }
 
-            // Assigner un ID automatiquement
-            product.Id = _nextId++;
-            _products.Add(product);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
-        }
+}
 
         // PUT: api/products/5
-        // [HttpPut("{id}")]
-        // public IActionResult UpdateProduct(int id, Product product)
-        // {
-        //     var existingProduct = _products.FirstOrDefault(p => p.Id == id);
-        //     if (existingProduct == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product) // <-- Add [FromBody] here
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
 
-        //     // Mise à jour des propriétés
-        //     existingProduct.Name = product.Name;
-        //     existingProduct.Price = product.Price;
-        //     existingProduct.Description = product.Description;
+            _context.Entry(product).State = EntityState.Modified;
 
-        //     return NoContent();
-        // }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // DELETE: api/products/5
-        // [HttpDelete("{id}")]
-        // public IActionResult DeleteProduct(int id)
-        // {
-        //     var product = _products.FirstOrDefault(p => p.Id == id);
-        //     if (product == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-        //     _products.Remove(product);
-        //     return NoContent();
-        // }
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.Id == id);
+        }
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/+G17yoeJW0=",
+  "dgSpecHash": "41JUMjajYvQ=",
   "success": true,
   "projectFilePath": "D:\\Priscillia-project\\INSI\\.NET\\api-fullstack\\api-fullstack\\MarketplaceApi\\MarketplaceApi.csproj",
   "expectedPackageFiles": [
@@ -34,8 +34,8 @@
     "C:\\Users\\Pris\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.7\\microsoft.extensions.primitives.9.0.7.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\microsoft.openapi\\1.6.23\\microsoft.openapi.1.6.23.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
-    "C:\\Users\\Pris\\.nuget\\packages\\mysqlconnector\\2.3.5\\mysqlconnector.2.3.5.nupkg.sha512",
-    "C:\\Users\\Pris\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\8.0.0\\pomelo.entityframeworkcore.mysql.8.0.0.nupkg.sha512",
+    "C:\\Users\\Pris\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
+    "C:\\Users\\Pris\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.4\\npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\swashbuckle.aspnetcore\\9.0.3\\swashbuckle.aspnetcore.9.0.3.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\9.0.3\\swashbuckle.aspnetcore.swagger.9.0.3.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\9.0.3\\swashbuckle.aspnetcore.swaggergen.9.0.3.nupkg.sha512",
@@ -54,18 +54,5 @@
     "C:\\Users\\Pris\\.nuget\\packages\\system.text.json\\9.0.7\\system.text.json.9.0.7.nupkg.sha512",
     "C:\\Users\\Pris\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "message": "Detected package version outside of dependency constraint: Pomelo.EntityFrameworkCore.MySql 8.0.0 requires Microsoft.EntityFrameworkCore.Relational (>= 8.0.0 && <= 8.0.999) but version Microsoft.EntityFrameworkCore.Relational 9.0.7 was resolved.",
-      "projectPath": "D:\\Priscillia-project\\INSI\\.NET\\api-fullstack\\api-fullstack\\MarketplaceApi\\MarketplaceApi.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\Priscillia-project\\INSI\\.NET\\api-fullstack\\api-fullstack\\MarketplaceApi\\MarketplaceApi.csproj",
-      "libraryId": "Microsoft.EntityFrameworkCore.Relational",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }
